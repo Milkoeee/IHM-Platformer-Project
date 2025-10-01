@@ -1,33 +1,30 @@
+using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TestMouvement : MonoBehaviour
 {
     // 2. These variables are to hold the Action references
     InputAction moveAction;
     InputAction AButton;
-    InputAction BButton;
-    InputAction XButton;
-    InputAction YButton;
-    InputAction StartButton;
+    public Rigidbody2D rb;
+    public float jumpSpeed = 20;
 
-    float quitTime = 1;
-    float totalTimePressed = 0;
+    public float speedMofifier = 5;
 
-    SpriteRenderer sprite;
+    bool maxJump = false;
+    bool isJumping = false;
 
-
+    [SerializeField] int maxJumpFrames = 10;
+    int curJumpFrames = 0;
 
     private void Start()
     {
         // 3. Find the references to the "Move" and "Jump" actions
         moveAction = InputSystem.actions.FindAction("Move");
         AButton = InputSystem.actions.FindAction("Jump");
-        BButton = InputSystem.actions.FindAction("Crouch");
-        XButton = InputSystem.actions.FindAction("Attack");
-        YButton = InputSystem.actions.FindAction("Interact");
-        StartButton = InputSystem.actions.FindAction("Start");
 
-        sprite = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -38,57 +35,28 @@ public class TestMouvement : MonoBehaviour
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
         // your movement code here
 
-        transform.position = (Vector3)moveValue;
+        rb.linearVelocityX = speedMofifier * moveValue.x;
 
-        if (AButton.IsPressed())
+        if (AButton.IsPressed() && rb.linearVelocityY == 0 && !isJumping) isJumping = true;
+
+        if (AButton.IsPressed() && !maxJump && isJumping)
         {
-            sprite.color = Color.green;
+            rb.linearVelocityY = jumpSpeed;
+            if (curJumpFrames >= maxJumpFrames) maxJump = true;
+            curJumpFrames++;
         }
+
+
+        if (rb.linearVelocityY == 0 && !isJumping)
+        {
+            maxJump = false;
+            curJumpFrames = 0;
+        }
+
         if (AButton.WasReleasedThisFrame())
         {
-            sprite.color = Color.white;
+            isJumping = false;
         }
-
-        if (BButton.IsPressed())
-        {
-            sprite.color = Color.red;
-        }
-        if (BButton.WasReleasedThisFrame())
-        {
-            sprite.color = Color.white;
-        }
-
-        if (XButton.IsPressed())
-        {
-            sprite.color = Color.blue;
-        }
-        if (XButton.WasReleasedThisFrame())
-        {
-            sprite.color = Color.white;
-        }
-
-        if (YButton.IsPressed())
-        {
-            sprite.color = Color.yellow;
-        }
-        if (YButton.WasReleasedThisFrame())
-        {
-            sprite.color = Color.white;
-        }
-
-        if (StartButton.IsPressed())
-        {
-            totalTimePressed += Time.deltaTime;
-            if (totalTimePressed >= quitTime)
-            {
-                Application.Quit();
-            }
-        }
-        if (YButton.WasReleasedThisFrame())
-        {
-            totalTimePressed = 0;
-        }
-
 
     }
 }
