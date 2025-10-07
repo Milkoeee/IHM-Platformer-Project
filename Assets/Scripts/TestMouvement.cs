@@ -7,8 +7,10 @@ public class TestMouvement : MonoBehaviour
     // 2. These variables are to hold the Action references
     InputAction moveAction;
     InputAction AButton;
+    InputAction sprintAction;
     public Rigidbody2D rb;
     public float jumpSpeed = 20;
+    public float sprintFactor = 2.0f;
 
     public float speedMofifier = 5;
 
@@ -23,6 +25,7 @@ public class TestMouvement : MonoBehaviour
         // 3. Find the references to the "Move" and "Jump" actions
         moveAction = InputSystem.actions.FindAction("Move");
         AButton = InputSystem.actions.FindAction("Jump");
+        sprintAction = InputSystem.actions.FindAction("Sprint");
 
         rb = GetComponent<Rigidbody2D>();
     }
@@ -32,10 +35,13 @@ public class TestMouvement : MonoBehaviour
         // 4. Read the "Move" action value, which is a 2D vector
         // and the "Jump" action state, which is a boolean value
 
+        bool isSprinting = sprintAction.IsPressed();
+        float currentSpeed = isSprinting ? speedMofifier * sprintFactor : speedMofifier;
+
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
         // your movement code here
 
-        rb.linearVelocityX = speedMofifier * moveValue.x;
+        rb.linearVelocityX = currentSpeed * moveValue.x;
 
         if (AButton.IsPressed() && rb.linearVelocityY == 0 && !isJumping) isJumping = true;
 
@@ -57,6 +63,5 @@ public class TestMouvement : MonoBehaviour
         {
             isJumping = false;
         }
-
     }
 }
