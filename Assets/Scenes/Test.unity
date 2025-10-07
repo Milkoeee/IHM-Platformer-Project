@@ -662,10 +662,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1575ac6e12b4c85aa8af87c4d82b008a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestMouvement
-  rb: {fileID: 0}
+  rb: {fileID: 708213450}
   jumpSpeed: 15
   speedMofifier: 5
-  maxJumpFrames: 100
+  maxJumpTime: 1
 --- !u!61 &708213455
 BoxCollider2D:
   m_ObjectHideFlags: 0
