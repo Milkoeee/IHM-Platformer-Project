@@ -15,8 +15,8 @@ public class TestMouvement : MonoBehaviour
     bool maxJump = false;
     bool isJumping = false;
 
-    [SerializeField] int maxJumpFrames = 10;
-    int curJumpFrames = 0;
+    [SerializeField] float maxJumpTime = 1;
+    float curJumpTime = 0;
 
     private void Start()
     {
@@ -42,15 +42,15 @@ public class TestMouvement : MonoBehaviour
         if (AButton.IsPressed() && !maxJump && isJumping)
         {
             rb.linearVelocityY = jumpSpeed;
-            if (curJumpFrames >= maxJumpFrames) maxJump = true;
-            curJumpFrames++;
+            if (curJumpTime >= maxJumpTime) maxJump = true;
+            curJumpTime += Time.deltaTime;
         }
 
 
         if (rb.linearVelocityY == 0 && !isJumping)
         {
             maxJump = false;
-            curJumpFrames = 0;
+            curJumpTime = 0;
         }
 
         if (AButton.WasReleasedThisFrame())
