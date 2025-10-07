@@ -1,62 +1,131 @@
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
+using System.Linq;
+
+
+
 
 public class TestMouvement : MonoBehaviour
 {
-    // 2. These variables are to hold the Action references
     InputAction moveAction;
     InputAction AButton;
     public Rigidbody2D rb;
     public float jumpSpeed = 20;
 
     public float speedMofifier = 5;
+    public float maxJumpTime = 1;
 
     bool maxJump = false;
     bool isJumping = false;
-
-    [SerializeField] float maxJumpTime = 1;
+    public float bufferTime = 0.1f;
+    bool canBeBuffered = false;
+    bool processBufferAction = false;
     float curJumpTime = 0;
+
+    Queue<float> bufferQueue = new Queue<float>();
 
     private void Start()
     {
-        // 3. Find the references to the "Move" and "Jump" actions
+
+        Debug.Log("called " + System.Reflection.MethodBase.GetCurrentMethod().Name + " at " + Time.time + "s");
         moveAction = InputSystem.actions.FindAction("Move");
         AButton = InputSystem.actions.FindAction("Jump");
 
         rb = GetComponent<Rigidbody2D>();
+        //rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 
     void Update()
     {
-        // 4. Read the "Move" action value, which is a 2D vector
-        // and the "Jump" action state, which is a boolean value
-
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
-        // your movement code here
 
         rb.linearVelocityX = speedMofifier * moveValue.x;
 
-        if (AButton.IsPressed() && rb.linearVelocityY == 0 && !isJumping) isJumping = true;
+        ProcessJump();
+        ProcessBufferQueue();
+
+    }
+
+    void JumpInit()
+    {
+        Debug.Log("called " + System.Reflection.MethodBase.GetCurrentMethod().Name + " at " + Time.time + "s");
+        isJumping = true;
+        canBeBuffered = false;
+        processBufferAction = false;
+
+    }
+
+    void Jump()
+    {
+        Debug.Log("called " + System.Reflection.MethodBase.GetCurrentMethod().Name + " at " + Time.time + "s");
+        rb.linearVelocityY = jumpSpeed;
+        if (curJumpTime >= maxJumpTime) maxJump = true;
+        curJumpTime += Time.deltaTime;
+    }
+
+    void ProcessJump()
+    {
+        if (AButton.IsPressed() && rb.linearVelocityY == 0 && !isJumping)
+        {
+            JumpInit();
+        }
+
+        if (AButton.IsPressed() && canBeBuffered)
+        {
+            Debug.Log("Buffered A");
+            bufferQueue.Enqueue(Time.time);
+        }
 
         if (AButton.IsPressed() && !maxJump && isJumping)
         {
-            rb.linearVelocityY = jumpSpeed;
-            if (curJumpTime >= maxJumpTime) maxJump = true;
-            curJumpTime += Time.deltaTime;
+            Jump();
         }
 
 
         if (rb.linearVelocityY == 0 && !isJumping)
         {
+            Debug.Log("Touched ground");
             maxJump = false;
             curJumpTime = 0;
+            processBufferAction = true;
         }
 
         if (AButton.WasReleasedThisFrame())
         {
+            Debug.Log("Released A");
             isJumping = false;
+            canBeBuffered = true;
         }
+    }
 
+    void ProcessBufferQueue()
+    {
+        foreach (float inputTime in bufferQueue)
+        {
+            if (Time.time > inputTime + bufferTime)
+            {
+                Debug.Log((inputTime + bufferTime) + "   " + Time.time + "   " + "Dequeue");
+                bufferQueue.Dequeue();
+                break;
+            }
+            else if (processBufferAction)
+            {
+                Debug.Log((inputTime + bufferTime) + "   " + Time.time + "   " + "Buffered Jump");
+                JumpReset();
+                ProcessJump();
+                bufferQueue.Clear();
+                break;
+            }
+        }
+    }
+
+    void JumpReset()
+    {
+        Debug.Log("called " + System.Reflection.MethodBase.GetCurrentMethod().Name + " at " + Time.time + "s");
+        maxJump = false;
+        curJumpTime = 0;
+        processBufferAction = true;
+        isJumping = false;
     }
 }
