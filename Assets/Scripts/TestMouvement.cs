@@ -24,6 +24,7 @@ public class TestMouvement : MonoBehaviour
     bool canBeBuffered = false;
     bool processBufferAction = false;
     float curJumpTime = 0;
+    bool pressing = false;
 
     Queue<float> bufferQueue = new Queue<float>();
 
@@ -59,11 +60,11 @@ public class TestMouvement : MonoBehaviour
         isJumping = true;
         canBeBuffered = false;
         processBufferAction = false;
-
     }
 
     void Jump()
     {
+        pressing = true;
         Debug.Log("called " + System.Reflection.MethodBase.GetCurrentMethod().Name + " at " + Time.time + "s");
         rb.linearVelocityY = jumpSpeed;
         if (curJumpTime >= maxJumpTime) maxJump = true;
@@ -72,7 +73,7 @@ public class TestMouvement : MonoBehaviour
 
     void ProcessJump()
     {
-        if (AButton.IsPressed() && rb.linearVelocityY == 0 && !isJumping)
+        if (AButton.IsPressed() && rb.linearVelocityY == 0 && !isJumping && !pressing)
         {
             JumpInit();
         }
@@ -80,6 +81,7 @@ public class TestMouvement : MonoBehaviour
         if (AButton.IsPressed() && canBeBuffered)
         {
             Debug.Log("Buffered A");
+            pressing = true;
             bufferQueue.Enqueue(Time.time);
         }
 
@@ -102,6 +104,7 @@ public class TestMouvement : MonoBehaviour
             Debug.Log("Released A");
             isJumping = false;
             canBeBuffered = true;
+            pressing = false;
         }
     }
 
@@ -133,5 +136,6 @@ public class TestMouvement : MonoBehaviour
         curJumpTime = 0;
         processBufferAction = true;
         isJumping = false;
+        pressing = false;
     }
 }
