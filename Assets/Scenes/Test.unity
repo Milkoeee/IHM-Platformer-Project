@@ -562,7 +562,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 2.0066433
+  m_Mass: 2.014035
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 10
@@ -624,7 +624,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.7830189, g: 0.2622375, b: 0.2622375, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -645,7 +645,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.84, y: -1.69, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -663,10 +663,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestMouvement
   rb: {fileID: 708213450}
+  bc2d: {fileID: 0}
   jumpSpeed: 15
   sprintFactor: 2
-  speedMofifier: 5
+  crouchFactor: 0.7
+  speedModifier: 5
   maxJumpTime: 1
+  isCrouched: 0
+  crouchHold: 0
+  originalScale: {x: 0, y: 0, z: 0}
 --- !u!61 &708213455
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -701,17 +706,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.003321588}
+  m_Offset: {x: 0, y: -0.0033217072}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 2}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 2.0066433}
+  m_Size: {x: 1, y: 1.0070175}
   m_EdgeRadius: 0
 --- !u!1 &826799514
 GameObject:
