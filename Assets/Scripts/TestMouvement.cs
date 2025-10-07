@@ -10,8 +10,10 @@ public class TestMouvement : MonoBehaviour
 {
     InputAction moveAction;
     InputAction AButton;
+    InputAction sprintAction;
     public Rigidbody2D rb;
     public float jumpSpeed = 20;
+    public float sprintFactor = 2.0f;
 
     public float speedMofifier = 5;
     public float maxJumpTime = 1;
@@ -31,16 +33,20 @@ public class TestMouvement : MonoBehaviour
         Debug.Log("called " + System.Reflection.MethodBase.GetCurrentMethod().Name + " at " + Time.time + "s");
         moveAction = InputSystem.actions.FindAction("Move");
         AButton = InputSystem.actions.FindAction("Jump");
+        sprintAction = InputSystem.actions.FindAction("Sprint");
 
         rb = GetComponent<Rigidbody2D>();
-        //rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 
     void Update()
     {
+        bool isSprinting = sprintAction.IsPressed();
+        float currentSpeed = isSprinting ? speedMofifier * sprintFactor : speedMofifier;
+
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
 
-        rb.linearVelocityX = speedMofifier * moveValue.x;
+        rb.linearVelocityX = currentSpeed * moveValue.x;
 
         ProcessJump();
         ProcessBufferQueue();
