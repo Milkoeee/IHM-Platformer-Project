@@ -26,12 +26,20 @@ public class TestMouvement : MonoBehaviour
     float curJumpTime = 0;
     bool pressing = false;
 
+    float totalSpeed = 0;
+
+    public int raycastLength = 30;
+
+    bool blockingLeft = false;
+    bool blockingRight = false;
+
+    LayerMask layerMask;
+
     Queue<float> bufferQueue = new Queue<float>();
 
     private void Start()
     {
-
-        Debug.Log("called " + System.Reflection.MethodBase.GetCurrentMethod().Name + " at " + Time.time + "s");
+        layerMask = LayerMask.GetMask("Wall");
         moveAction = InputSystem.actions.FindAction("Move");
         AButton = InputSystem.actions.FindAction("Jump");
         sprintAction = InputSystem.actions.FindAction("Sprint");
@@ -47,7 +55,13 @@ public class TestMouvement : MonoBehaviour
 
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
 
-        rb.linearVelocityX = currentSpeed * moveValue.x;
+        totalSpeed = currentSpeed * moveValue.x;
+
+
+        CollisionRayCast();
+
+        rb.linearVelocityX = totalSpeed;
+
 
         ProcessJump();
         ProcessBufferQueue();
@@ -56,7 +70,6 @@ public class TestMouvement : MonoBehaviour
 
     void JumpInit()
     {
-        Debug.Log("called " + System.Reflection.MethodBase.GetCurrentMethod().Name + " at " + Time.time + "s");
         isJumping = true;
         canBeBuffered = false;
         processBufferAction = false;
@@ -65,7 +78,6 @@ public class TestMouvement : MonoBehaviour
     void Jump()
     {
         pressing = true;
-        Debug.Log("called " + System.Reflection.MethodBase.GetCurrentMethod().Name + " at " + Time.time + "s");
         rb.linearVelocityY = jumpSpeed;
         if (curJumpTime >= maxJumpTime) maxJump = true;
         curJumpTime += Time.deltaTime;
@@ -80,7 +92,6 @@ public class TestMouvement : MonoBehaviour
 
         if (AButton.IsPressed() && canBeBuffered)
         {
-            Debug.Log("Buffered A");
             pressing = true;
             bufferQueue.Enqueue(Time.time);
         }
@@ -93,7 +104,6 @@ public class TestMouvement : MonoBehaviour
 
         if (rb.linearVelocityY == 0 && !isJumping)
         {
-            Debug.Log("Touched ground");
             maxJump = false;
             curJumpTime = 0;
             processBufferAction = true;
@@ -101,7 +111,6 @@ public class TestMouvement : MonoBehaviour
 
         if (AButton.WasReleasedThisFrame())
         {
-            Debug.Log("Released A");
             isJumping = false;
             canBeBuffered = true;
             pressing = false;
@@ -114,13 +123,11 @@ public class TestMouvement : MonoBehaviour
         {
             if (Time.time > inputTime + bufferTime)
             {
-                Debug.Log((inputTime + bufferTime) + "   " + Time.time + "   " + "Dequeue");
                 bufferQueue.Dequeue();
                 break;
             }
             else if (processBufferAction)
             {
-                Debug.Log((inputTime + bufferTime) + "   " + Time.time + "   " + "Buffered Jump");
                 JumpReset();
                 ProcessJump();
                 bufferQueue.Clear();
@@ -131,11 +138,31 @@ public class TestMouvement : MonoBehaviour
 
     void JumpReset()
     {
-        Debug.Log("called " + System.Reflection.MethodBase.GetCurrentMethod().Name + " at " + Time.time + "s");
         maxJump = false;
         curJumpTime = 0;
         processBufferAction = true;
         isJumping = false;
         pressing = false;
+    }
+
+    void CollisionRayCast()
+    {
+
+        blockingLeft = false;
+        blockingRight = false;
+        if (Physics2D.Raycast(transform.position, transform.TransformDirection(Vector3.left), totalSpeed, layerMask))
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.left) * totalSpeed, Color.yellow);
+            Debug.Log("Did Hit Left");
+            blockingLeft = true;
+
+        }
+        
+        if (Physics2D.Raycast(transform.position, transform.TransformDirection(Vector3.right), totalSpeed, layerMask))
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.right) * totalSpeed, Color.yellow);
+            Debug.Log("Did Hit Right");
+            blockingRight = true;
+        }
     }
 }
