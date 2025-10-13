@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using System.Linq;
 
 
 
@@ -59,6 +58,20 @@ public class TestMouvement : MonoBehaviour
 
 
         CollisionRayCast();
+        if (blockingLeft)
+        {
+            if (Vector2.Dot(moveValue, Vector2.left) > 0)
+            {
+                totalSpeed = 0;
+            }
+        }
+        if (blockingRight)
+        {
+            if (Vector2.Dot(moveValue, Vector2.right) > 0)
+            {
+                totalSpeed = 0;
+            }
+        }
 
         rb.linearVelocityX = totalSpeed;
 
@@ -163,6 +176,7 @@ public class TestMouvement : MonoBehaviour
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.right) * totalSpeed, Color.yellow);
             Debug.Log("Did Hit Right");
             blockingRight = true;
+            
         }
     }
 }
