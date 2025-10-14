@@ -172,18 +172,25 @@ public class TestMouvement : MonoBehaviour
         blockingRight = false;
         for (int i=0; i < nRays; i++)
         {
-            if (Physics2D.Raycast(transform.position - new Vector3(collider.size.x / 2, (float) Math.Pow(-1, i)*(i+1)*collider.size.y/nRays, 0), transform.TransformDirection(Vector3.left), Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, layerMask))
+            if (Physics2D.Raycast(transform.position - new Vector3(collider.size.x / 2, 2*i*collider.size.y/(nRays-1) - collider.size.y, 0), transform.TransformDirection(Vector3.left), Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, layerMask))
             {
-                Debug.DrawRay(transform.position - new Vector3(collider.size.x / 2, (float)Math.Pow(-1, i) * (i+1) * collider.size.y / nRays, 0), transform.TransformDirection(Vector3.left) * Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, Color.yellow);
+                Debug.DrawRay(transform.position - new Vector3(collider.size.x / 2, 2*i*collider.size.y/(nRays-1) - collider.size.y, 0), transform.TransformDirection(Vector3.left) * Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, Color.yellow);
                 Debug.Log("Did Hit Left");
                 blockingLeft = true;
             }
-            
-            if (Physics2D.Raycast(transform.position + new Vector3(collider.size.x / 2, (float) Math.Pow(-1, i)*(i+1)*collider.size.y/nRays, 0), transform.TransformDirection(Vector3.right), Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, layerMask))
+
+            if (Physics2D.Raycast(transform.position + new Vector3(collider.size.x / 2, 2 * i * collider.size.y / (nRays - 1) - collider.size.y, 0), transform.TransformDirection(Vector3.right), Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, layerMask))
             {
-                Debug.DrawRay(transform.position + new Vector3(collider.size.x / 2, (float)Math.Pow(-1, i) * (i+1) * collider.size.y / nRays, 0), transform.TransformDirection(Vector3.right) * Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, Color.yellow);
+                Debug.DrawRay(transform.position + new Vector3(collider.size.x / 2, 2 * i * collider.size.y / (nRays - 1) - collider.size.y, 0), transform.TransformDirection(Vector3.right) * Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, Color.yellow);
                 Debug.Log("Did Hit Right");
                 blockingRight = true;
+            } 
+
+            if (Physics2D.Raycast(transform.position + new Vector3(i*collider.size.x/(nRays-1) - collider.size.x/2, collider.size.y, 0), transform.TransformDirection(Vector3.up), Mathf.Abs(rb.linearVelocityY) * Time.deltaTime * preFrames, layerMask))
+            {
+                Debug.DrawRay(transform.position + new Vector3(i*collider.size.x/(nRays-1) - collider.size.x/2, collider.size.y, 0), transform.TransformDirection(Vector3.up) * Mathf.Abs(rb.linearVelocityY) * Time.deltaTime * preFrames, Color.yellow);
+                Debug.Log("Did Hit Right");
+                maxJump = true;
             }   
         }
     }
