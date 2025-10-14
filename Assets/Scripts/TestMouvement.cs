@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine.Rendering;
+using System;
 
 
 
@@ -32,9 +35,13 @@ public class TestMouvement : MonoBehaviour
     bool blockingLeft = false;
     bool blockingRight = false;
 
+    public int preFrames = 1;
+    public int nRays = 1;
+
     LayerMask layerMask;
 
     Queue<float> bufferQueue = new Queue<float>();
+    BoxCollider2D collider;
 
     private void Start()
     {
@@ -44,6 +51,7 @@ public class TestMouvement : MonoBehaviour
         sprintAction = InputSystem.actions.FindAction("Sprint");
 
         rb = GetComponent<Rigidbody2D>();
+        collider = GetComponent<BoxCollider2D>();
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 
@@ -60,14 +68,14 @@ public class TestMouvement : MonoBehaviour
         CollisionRayCast();
         if (blockingLeft)
         {
-            if (Vector2.Dot(moveValue, Vector2.left) > 0)
+            if (moveValue.x < 0)
             {
                 totalSpeed = 0;
             }
         }
         if (blockingRight)
         {
-            if (Vector2.Dot(moveValue, Vector2.right) > 0)
+            if (moveValue.x > 0)
             {
                 totalSpeed = 0;
             }
@@ -98,7 +106,7 @@ public class TestMouvement : MonoBehaviour
 
     void ProcessJump()
     {
-        if (AButton.IsPressed() && rb.linearVelocityY == 0 && !isJumping && !pressing)
+        if (AButton.IsPressed() && Mathf.Abs(rb.linearVelocityY) <1E-06f && !isJumping && !pressing)
         {
             JumpInit();
         }
@@ -115,7 +123,7 @@ public class TestMouvement : MonoBehaviour
         }
 
 
-        if (rb.linearVelocityY == 0 && !isJumping)
+        if (Mathf.Abs(rb.linearVelocityY) <1E-06f && !isJumping)
         {
             maxJump = false;
             curJumpTime = 0;
@@ -160,23 +168,23 @@ public class TestMouvement : MonoBehaviour
 
     void CollisionRayCast()
     {
-
         blockingLeft = false;
         blockingRight = false;
-        if (Physics2D.Raycast(transform.position, transform.TransformDirection(Vector3.left), totalSpeed, layerMask))
+        for (int i=0; i < nRays; i++)
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.left) * totalSpeed, Color.yellow);
-            Debug.Log("Did Hit Left");
-            blockingLeft = true;
-
-        }
-        
-        if (Physics2D.Raycast(transform.position, transform.TransformDirection(Vector3.right), totalSpeed, layerMask))
-        {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.right) * totalSpeed, Color.yellow);
-            Debug.Log("Did Hit Right");
-            blockingRight = true;
+            if (Physics2D.Raycast(transform.position - new Vector3(collider.size.x / 2, (float) Math.Pow(-1, i)*(i+1)*collider.size.y/nRays, 0), transform.TransformDirection(Vector3.left), Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, layerMask))
+            {
+                Debug.DrawRay(transform.position - new Vector3(collider.size.x / 2, (float)Math.Pow(-1, i) * (i+1) * collider.size.y / nRays, 0), transform.TransformDirection(Vector3.left) * Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, Color.yellow);
+                Debug.Log("Did Hit Left");
+                blockingLeft = true;
+            }
             
+            if (Physics2D.Raycast(transform.position + new Vector3(collider.size.x / 2, (float) Math.Pow(-1, i)*(i+1)*collider.size.y/nRays, 0), transform.TransformDirection(Vector3.right), Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, layerMask))
+            {
+                Debug.DrawRay(transform.position + new Vector3(collider.size.x / 2, (float)Math.Pow(-1, i) * (i+1) * collider.size.y / nRays, 0), transform.TransformDirection(Vector3.right) * Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, Color.yellow);
+                Debug.Log("Did Hit Right");
+                blockingRight = true;
+            }   
         }
     }
 }
