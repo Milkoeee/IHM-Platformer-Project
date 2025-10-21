@@ -13,12 +13,18 @@ public class TestMouvement : MonoBehaviour
     InputAction moveAction;
     InputAction AButton;
     InputAction sprintAction;
+    InputAction crouchAction;
+
     public Rigidbody2D rb;
+    public BoxCollider2D bc2d;
+
     public float jumpSpeed = 20;
     public float sprintFactor = 2.0f;
+    public float crouchFactor = 0.5f;
 
-    public float speedMofifier = 5;
+    public float speedModifier = 5;
     public float maxJumpTime = 1;
+    public float currentSpeed;
 
     bool maxJump = false;
     bool isJumping = false;
@@ -31,7 +37,6 @@ public class TestMouvement : MonoBehaviour
     bool blockingLeft = false;
     bool blockingRight = false;
     bool isSprinting = false;
-    public float currentSpeed;
 
     bool isSlowed = false;
     public float slowModifier = 2;
@@ -47,27 +52,64 @@ public class TestMouvement : MonoBehaviour
     Queue<float> bufferQueue = new Queue<float>();
     BoxCollider2D playerCollider;
 
+    public bool isCrouched;
+    public float crouchHold;
+    public Vector3 originalScale;
+
     private void Start()
     {
         layerMask = LayerMask.GetMask("Wall");
         moveAction = InputSystem.actions.FindAction("Move");
         AButton = InputSystem.actions.FindAction("Jump");
         sprintAction = InputSystem.actions.FindAction("Sprint");
+        crouchAction = InputSystem.actions.FindAction("Crouch");
 
         rb = GetComponent<Rigidbody2D>();
         playerCollider = GetComponent<BoxCollider2D>();
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+
+        originalScale = transform.localScale;
     }
     void Update()
     {
-        bool isSprinting = sprintAction.IsPressed();
+        isSprinting = sprintAction.IsPressed() && !isCrouched;
         if (Mathf.Abs(rb.linearVelocityY) < 1E-06f)
         {
-            currentSpeed = isSprinting ? speedMofifier * sprintFactor : speedMofifier;
+            currentSpeed = isSprinting ? speedModifier * sprintFactor : isCrouched ? speedModifier * crouchFactor : speedModifier;
             currentSpeed = isSlowed ? currentSpeed / slowModifier : currentSpeed;
             currentSpeed = isBoosted ? boostModifier * currentSpeed : currentSpeed;
         }
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
+
+        if (moveValue.x < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 180f, 0);
+        }
+        else if (moveValue.x > 0) transform.rotation = Quaternion.Euler(0, 0, 0);
+
+        if (crouchAction.IsPressed())
+        {
+            crouchHold += Time.deltaTime;
+            if (crouchHold >= 0.8f && !isCrouched)
+            {
+                isCrouched = true;
+                transform.localScale = new Vector3(originalScale.x, originalScale.y * crouchFactor, originalScale.z);
+                float difference = (transform.localScale.y - originalScale.y) / 2f;
+                transform.position += Vector3.up * difference;
+            }
+        }
+        else
+        {
+            crouchHold = 0f;
+        }
+
+        if (isCrouched && !crouchAction.IsPressed())
+        {
+            isCrouched = false;
+            float difference = (originalScale.y - transform.localScale.y) / 2f;
+            transform.localScale = originalScale; 
+            transform.position += Vector3.up * difference;
+        }
 
         totalSpeed = currentSpeed * moveValue.x;
 
