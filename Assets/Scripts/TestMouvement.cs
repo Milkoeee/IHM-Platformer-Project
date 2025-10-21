@@ -27,13 +27,17 @@ public class TestMouvement : MonoBehaviour
     bool processBufferAction = false;
     float curJumpTime = 0;
     bool pressing = false;
-
     float totalSpeed = 0;
-
-    public int raycastLength = 30;
-
     bool blockingLeft = false;
     bool blockingRight = false;
+    bool isSprinting = false;
+    public float currentSpeed;
+
+    bool isSlowed = false;
+    public float slowModifier = 2;
+
+    bool isBoosted = false;
+    public float boostModifier = 2;
 
     public int preFrames = 1;
     public int nRays = 1;
@@ -41,7 +45,7 @@ public class TestMouvement : MonoBehaviour
     LayerMask layerMask;
 
     Queue<float> bufferQueue = new Queue<float>();
-    BoxCollider2D collider;
+    BoxCollider2D playerCollider;
 
     private void Start()
     {
@@ -51,15 +55,18 @@ public class TestMouvement : MonoBehaviour
         sprintAction = InputSystem.actions.FindAction("Sprint");
 
         rb = GetComponent<Rigidbody2D>();
-        collider = GetComponent<BoxCollider2D>();
+        playerCollider = GetComponent<BoxCollider2D>();
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
-
     void Update()
     {
         bool isSprinting = sprintAction.IsPressed();
-        float currentSpeed = isSprinting ? speedMofifier * sprintFactor : speedMofifier;
-
+        if (Mathf.Abs(rb.linearVelocityY) < 1E-06f)
+        {
+            currentSpeed = isSprinting ? speedMofifier * sprintFactor : speedMofifier;
+            currentSpeed = isSlowed ? currentSpeed / slowModifier : currentSpeed;
+            currentSpeed = isBoosted ? boostModifier * currentSpeed : currentSpeed;
+        }
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
 
         totalSpeed = currentSpeed * moveValue.x;
@@ -168,30 +175,38 @@ public class TestMouvement : MonoBehaviour
 
     void CollisionRayCast()
     {
+        Vector2 colliderSize = playerCollider.size;
         blockingLeft = false;
         blockingRight = false;
-        for (int i=0; i < nRays; i++)
+        for (int i = 0; i < nRays; i++)
         {
-            if (Physics2D.Raycast(transform.position - new Vector3(collider.size.x / 2, 2*i*collider.size.y/(nRays-1) - collider.size.y, 0), transform.TransformDirection(Vector3.left), Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, layerMask))
+            if (Physics2D.Raycast(transform.position - new Vector3(colliderSize.x / 2, 2 * i * colliderSize.y / (nRays - 1) - colliderSize.y, 0), transform.TransformDirection(Vector3.left), Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, layerMask))
             {
-                Debug.DrawRay(transform.position - new Vector3(collider.size.x / 2, 2*i*collider.size.y/(nRays-1) - collider.size.y, 0), transform.TransformDirection(Vector3.left) * Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, Color.yellow);
-                Debug.Log("Did Hit Left");
                 blockingLeft = true;
             }
 
-            if (Physics2D.Raycast(transform.position + new Vector3(collider.size.x / 2, 2 * i * collider.size.y / (nRays - 1) - collider.size.y, 0), transform.TransformDirection(Vector3.right), Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, layerMask))
+            if (Physics2D.Raycast(transform.position + new Vector3(colliderSize.x / 2, 2 * i * colliderSize.y / (nRays - 1) - colliderSize.y, 0), transform.TransformDirection(Vector3.right), Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, layerMask))
             {
-                Debug.DrawRay(transform.position + new Vector3(collider.size.x / 2, 2 * i * collider.size.y / (nRays - 1) - collider.size.y, 0), transform.TransformDirection(Vector3.right) * Mathf.Abs(totalSpeed) * Time.deltaTime * preFrames, Color.yellow);
-                Debug.Log("Did Hit Right");
                 blockingRight = true;
-            } 
+            }
 
-            if (Physics2D.Raycast(transform.position + new Vector3(i*collider.size.x/(nRays-1) - collider.size.x/2, collider.size.y, 0), transform.TransformDirection(Vector3.up), Mathf.Abs(rb.linearVelocityY) * Time.deltaTime * preFrames, layerMask))
+            if (Physics2D.Raycast(transform.position + new Vector3(i * colliderSize.x / (nRays - 1) - colliderSize.x / 2, colliderSize.y, 0), transform.TransformDirection(Vector3.up), Mathf.Abs(rb.linearVelocityY) * Time.deltaTime * preFrames, layerMask))
             {
-                Debug.DrawRay(transform.position + new Vector3(i*collider.size.x/(nRays-1) - collider.size.x/2, collider.size.y, 0), transform.TransformDirection(Vector3.up) * Mathf.Abs(rb.linearVelocityY) * Time.deltaTime * preFrames, Color.yellow);
-                Debug.Log("Did Hit Right");
                 maxJump = true;
-            }   
+            }
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("Entering " + other.gameObject.name);
+        if (other.gameObject.name.Equals("Slow")) isSlowed = true;
+        if (other.gameObject.name.Equals("Boost")) isBoosted = true;    }
+    
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        Debug.Log("Leaving " + other.gameObject.name);
+        if (other.gameObject.name.Equals("Slow")) isSlowed = false;
+        if (other.gameObject.name.Equals("Boost")) isBoosted = false;
     }
 }
