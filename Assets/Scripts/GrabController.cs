@@ -23,7 +23,6 @@ public class GrabController : MonoBehaviour
         {
             if(grabAction.IsPressed())
             {
-                Debug.Log("Grab");
                 grabCheck.collider.gameObject.transform.parent = boxHolder;
                 grabCheck.collider.gameObject.transform.position = boxHolder.position;
                 grabCheck.collider.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
