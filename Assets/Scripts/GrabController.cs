@@ -6,12 +6,14 @@ public class GrabController : MonoBehaviour
     public Transform boxHolder;
     public Transform grabDetection;
     public float rayDist;
+    private TestMouvement mov;
 
     InputAction grabAction;
 
     void Start()
     {
         grabAction = InputSystem.actions.FindAction("Grab");
+        mov = GetComponent<TestMouvement>();
     }
 
     // Update is called once per frame
@@ -19,7 +21,7 @@ public class GrabController : MonoBehaviour
     {
         RaycastHit2D grabCheck = Physics2D.Raycast(grabDetection.position, Vector2.right * transform.localScale, rayDist);
 
-        if (grabCheck.collider != null && grabCheck.collider.tag == "Box")
+        if (grabCheck.collider != null && grabCheck.collider.tag == "Box" && !mov.isCrouched)
         {
             if(grabAction.IsPressed())
             {

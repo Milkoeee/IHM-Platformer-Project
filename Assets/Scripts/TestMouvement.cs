@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 public class TestMouvement : MonoBehaviour
 {
     // 2. These variables are to hold the Action references
+    private SpriteRenderer sp;
+
     InputAction moveAction;
     InputAction AButton;
     InputAction sprintAction;
@@ -39,6 +41,7 @@ public class TestMouvement : MonoBehaviour
         crouchAction = InputSystem.actions.FindAction("Crouch");
 
         rb = GetComponent<Rigidbody2D>();
+        sp = GetComponent<SpriteRenderer>();
 
         originalScale = transform.localScale;
     }
@@ -48,6 +51,12 @@ public class TestMouvement : MonoBehaviour
         // 4. Read the "Move" action value, which is a 2D vector
         // and the "Jump" action state, which is a boolean value
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
+
+        if (moveValue.x < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 180f, 0);
+        }
+        else if (moveValue.x > 0) transform.rotation = Quaternion.Euler(0, 0, 0);
 
         bool isSprinting = sprintAction.IsPressed() && !isCrouched;
         currentSpeed = isSprinting ? speedModifier * sprintFactor : isCrouched ? speedModifier * crouchFactor : speedModifier;
