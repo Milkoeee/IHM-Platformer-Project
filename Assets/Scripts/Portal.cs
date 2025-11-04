@@ -4,9 +4,20 @@ using UnityEngine;
 public class Portal : MonoBehaviour
 {
     private HashSet<GameObject> portalObjects = new HashSet<GameObject>();
-    [SerializeField] private Transform destination;
+    [SerializeField] private Portal destination;
+    BoxCollider2D portalCollider;
+    public Vector2 portalSize;
+
+    void Start()
+    {
+        portalCollider = GetComponent<BoxCollider2D>();
+        portalSize = portalCollider.size;
+    } 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        int sideCollision = 1;
+        float yOffset = 0;
+
         if (portalObjects.Contains(collision.gameObject))
         {
             return;
@@ -17,7 +28,14 @@ public class Portal : MonoBehaviour
             destinationPortal.portalObjects.Add(collision.gameObject);
         }
 
-        collision.transform.position = destination.position;
+        if (collision.transform.position.x - transform.position.x < 0)
+        {
+            sideCollision = -1;
+        }
+
+        yOffset = collision.transform.position.y - transform.position.y;
+
+        collision.transform.position = new Vector3(destination.transform.position.x + sideCollision * destination.portalSize.x / 2, destination.transform.position.y + yOffset, 0);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
