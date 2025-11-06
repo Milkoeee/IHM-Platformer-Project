@@ -55,7 +55,7 @@ public class TestMouvement : MonoBehaviour
     public float boostModifier = 2;
 
     Queue<float> bufferQueue = new Queue<float>();
-    public bool isCrouched;    
+    public bool isCrouched;
 
     public Vector3 originalScale;
 
@@ -150,7 +150,7 @@ public class TestMouvement : MonoBehaviour
         }
         if (AButton.IsPressed() && (!inAir || inAirTime < bufferTime) && !isJumping && !pressing)
         {
-            Debug.Log("jump init" + inAir + "    " + (inAirTime < bufferTime) );
+            Debug.Log("jump init" + inAir + "    " + (inAirTime < bufferTime));
             JumpInit();
         }
 
@@ -219,7 +219,7 @@ public class TestMouvement : MonoBehaviour
             floorsCounter--;
             if (!multipleFloors) inAir = true;
             if (floorsCounter <= 1) multipleFloors = false;
-        } 
+        }
         if (other.gameObject.name.Equals("SlowSurface")) isSlowed = false;
         if (other.gameObject.name.Equals("BoostSurface")) isBoosted = false;
     }
@@ -229,13 +229,13 @@ public class TestMouvement : MonoBehaviour
         if (other.gameObject.name.Equals("Ceiling")) maxJump = true;
         if (other.gameObject.name.Equals("Floor"))
         {
-            floorsCounter++; 
+            floorsCounter++;
             if (floorsCounter > 1)
             {
                 multipleFloors = true;
-            } 
+            }
             inAir = false;
-        } 
+        }
         if (other.gameObject.name.Equals("SlowSurface")) isSlowed = true;
         if (other.gameObject.name.Equals("BoostSurface")) isBoosted = true;
     }
@@ -246,7 +246,7 @@ public class TestMouvement : MonoBehaviour
         for (int i = 0; i < nRays; i++)
         {
             float offset = playerCollider.size.x;
-            Vector2 src = new Vector2(transform.position.x - offset/2 + i*offset/nRays, transform.position.y);
+            Vector2 src = new Vector2(transform.position.x - offset / 2 + i * offset / nRays, transform.position.y);
             RaycastHit2D hit = Physics2D.Raycast(src, Vector2.up, raySize, layers);
             Debug.DrawRay(src, Vector2.up * raySize, Color.yellow);
 
