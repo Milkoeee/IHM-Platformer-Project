@@ -8,13 +8,13 @@ using Unity.VisualScripting;
 public class TestMouvement : MonoBehaviour
 {
     InputAction moveAction;
-    InputAction AButton;
+    InputAction jumpButton;
     InputAction sprintAction;
     InputAction crouchAction;
 
-    public Rigidbody2D rb;
-    public BoxCollider2D bc2d;
+    public PlayerAudioController audioController;
 
+    public Rigidbody2D rb;
     public float jumpSpeed = 20;
     public float sprintFactor = 2.0f;
     public float crouchFactor = 0.5f;
@@ -64,7 +64,7 @@ public class TestMouvement : MonoBehaviour
         layers = LayerMask.GetMask("Wall");
         playerCollider = GetComponent<BoxCollider2D>();
         moveAction = InputSystem.actions.FindAction("Move");
-        AButton = InputSystem.actions.FindAction("Jump");
+        jumpButton = InputSystem.actions.FindAction("Jump");
         sprintAction = InputSystem.actions.FindAction("Sprint");
         crouchAction = InputSystem.actions.FindAction("Crouch");
 
@@ -93,6 +93,20 @@ public class TestMouvement : MonoBehaviour
         }
         else if (moveValue.x > 0) transform.rotation = Quaternion.Euler(0, 0, 0);
 
+        ProcessCrouch();
+
+        totalSpeed = currentSpeed * moveValue.x;
+
+        rb.linearVelocityX = totalSpeed;
+
+
+        ProcessJump();
+        ProcessBufferQueue();
+
+    }
+
+    void ProcessCrouch()
+    {
         if (crouchAction.IsPressed() && !isCrouched)
         {
             isCrouched = true;
@@ -112,19 +126,11 @@ public class TestMouvement : MonoBehaviour
         {
             ProcessCrouchRays();
         }
-
-        totalSpeed = currentSpeed * moveValue.x;
-
-        rb.linearVelocityX = totalSpeed;
-
-
-        ProcessJump();
-        ProcessBufferQueue();
-
     }
 
     void JumpInit()
     {
+        audioController.PlaySound(PlayerAudioController.soundID.JUMP);
         isJumping = true;
         canBeBuffered = false;
         processBufferAction = false;
@@ -148,21 +154,19 @@ public class TestMouvement : MonoBehaviour
         {
             canBeBuffered = false;
         }
-        if (AButton.IsPressed() && (!inAir || inAirTime < bufferTime) && !isJumping && !pressing)
+        if (jumpButton.IsPressed() && (!inAir || inAirTime < bufferTime) && !isJumping && !pressing)
         {
-            Debug.Log("jump init" + inAir + "    " + (inAirTime < bufferTime) );
             JumpInit();
         }
 
-        if (AButton.IsPressed() && canBeBuffered)
+        if (jumpButton.IsPressed() && canBeBuffered)
         {
             pressing = true;
             bufferQueue.Enqueue(Time.time);
         }
 
-        if (AButton.IsPressed() && !maxJump && isJumping)
+        if (jumpButton.IsPressed() && !maxJump && isJumping)
         {
-            //Debug.Log("jumping");
             Jump();
         }
 
@@ -174,7 +178,7 @@ public class TestMouvement : MonoBehaviour
             processBufferAction = true;
         }
 
-        if (AButton.WasReleasedThisFrame())
+        if (jumpButton.WasReleasedThisFrame())
         {
             isJumping = false;
             canBeBuffered = true;
@@ -235,9 +239,18 @@ public class TestMouvement : MonoBehaviour
                 multipleFloors = true;
             } 
             inAir = false;
-        } 
-        if (other.gameObject.name.Equals("SlowSurface")) isSlowed = true;
-        if (other.gameObject.name.Equals("BoostSurface")) isBoosted = true;
+        }
+        if (other.gameObject.name.Equals("SlowSurface"))
+        {
+            isSlowed = true;
+            audioController.PlaySound(PlayerAudioController.soundID.SLOW);
+
+        }
+        if (other.gameObject.name.Equals("BoostSurface"))
+        {
+            isBoosted = true;
+            audioController.PlaySound(PlayerAudioController.soundID.BOOST);
+        }
     }
 
     void ProcessCrouchRays()
