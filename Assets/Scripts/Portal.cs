@@ -6,11 +6,13 @@ public class Portal : MonoBehaviour
     private HashSet<GameObject> portalObjects = new HashSet<GameObject>();
     [SerializeField] private Portal destination;
     BoxCollider2D portalCollider;
-    public Vector2 portalSize;
+    AudioSource portalSound;
+    Vector2 portalSize;
 
     void Start()
     {
         portalCollider = GetComponent<BoxCollider2D>();
+        portalSound = GetComponent<AudioSource>();
         portalSize = portalCollider.size;
     } 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -36,6 +38,8 @@ public class Portal : MonoBehaviour
         yOffset = collision.transform.position.y - transform.position.y;
 
         collision.transform.position = new Vector3(destination.transform.position.x + sideCollision * destination.portalSize.x / 2, destination.transform.position.y + yOffset, 0);
+
+        portalSound.Play();
     }
 
     private void OnTriggerExit2D(Collider2D collision)

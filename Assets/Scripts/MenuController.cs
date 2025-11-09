@@ -30,7 +30,7 @@ public class MenuController : MonoBehaviour
 
     public void PlayLevel(int levelId)
     {
-        SceneManager.LoadSceneAsync(levelId);
+        SceneManager.LoadSceneAsync("Scenes/Niv" + levelId);
     }
 
     public void QuitGame()
