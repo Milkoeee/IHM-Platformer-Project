@@ -24,8 +24,10 @@ public class PauseMenu : MonoBehaviour
 
     public void Home()
     {
+        isPaused = false;
+        Time.timeScale = 1.0f;
         SceneManager.LoadSceneAsync(0);
-        Time.timeScale = 0.0f;
+        
     }
 
     public void Resume()
@@ -37,6 +39,8 @@ public class PauseMenu : MonoBehaviour
 
     public void Restart()
     {
+        isPaused = false;
+        Time.timeScale = 1.0f;
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
     }
 }

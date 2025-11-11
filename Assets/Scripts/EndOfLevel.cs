@@ -14,8 +14,19 @@ public class EndOfLevel : MonoBehaviour
     {
         if (collision.gameObject.name.Equals("Player"))
         {
+            UnlockNextLevel();
             finishSound.Play();
             //SceneManager.LoadScene("Scenes/Main Menu", LoadSceneMode.Single);
         } 
+    }
+
+    void UnlockNextLevel()
+    {
+        int index = SceneManager.GetActiveScene().buildIndex;
+        if (index >= PlayerPrefs.GetInt("Unlocked"))
+        {
+            PlayerPrefs.SetInt("Unlocked", index + 1);
+            PlayerPrefs.Save();
+        }
     }
 }

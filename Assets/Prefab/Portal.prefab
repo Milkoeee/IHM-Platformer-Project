@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 4956578575819319199}
   - component: {fileID: 2146605369360748665}
   - component: {fileID: 6852720886675192949}
-  - component: {fileID: -3217842841946080516}
+  - component: {fileID: 3605179045082674920}
+  - component: {fileID: 9210609868729508463}
   m_Layer: 0
   m_Name: Portal
   m_TagString: Untagged
@@ -152,10 +153,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Portal
   destination: {fileID: 0}
-  portalSize: {x: 0, y: 0}
---- !u!95 &-3217842841946080516
-Animator:
-  serializedVersion: 7
 --- !u!82 &3605179045082674920
 AudioSource:
   m_ObjectHideFlags: 0
@@ -253,3 +250,25 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &9210609868729508463
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131717401831834553}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e6291f352ffa71947bbb860f88676ddb, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
