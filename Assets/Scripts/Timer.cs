@@ -7,12 +7,18 @@ public class Timer : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] GameObject GOPanel;
-    float timeLeft = 5f;
+    [SerializeField] float timeLeft = 5f;
+    [SerializeField] float maxTime = 300;
+
+    void Start()
+    {
+        timeLeft = maxTime;
+    }
 
     // Update is called once per frame
     void Update()
     {
-        if ((timeLeft > 0))
+        if (timeLeft > 0)
         {
             timeLeft -= Time.deltaTime;
         }
@@ -40,7 +46,6 @@ public class Timer : MonoBehaviour
     public void Restart()
     {
         Time.timeScale = 1.0f;
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-        
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);        
     }
 }
