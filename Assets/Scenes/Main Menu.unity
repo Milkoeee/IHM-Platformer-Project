@@ -1785,6 +1785,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 776987866}
   m_CullTransparentMesh: 1
+--- !u!1 &840020217 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8086564987170518943, guid: 9c994be5002b6f34c9f63ca7c869888a, type: 3}
+  m_PrefabInstance: {fileID: 1195767453359885201}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &840020219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840020217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a1e4920a8cf7d74ca42cc826fee6da6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VirtualMouseController
 --- !u!1 &859100326
 GameObject:
   m_ObjectHideFlags: 0
@@ -4104,7 +4121,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8086564987170518943, guid: 9c994be5002b6f34c9f63ca7c869888a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 840020219}
   m_SourcePrefab: {fileID: 100100000, guid: 9c994be5002b6f34c9f63ca7c869888a, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

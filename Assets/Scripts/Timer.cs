@@ -14,7 +14,6 @@ public class Timer : MonoBehaviour
     {
         timeLeft = maxTime;
     }
-
     // Update is called once per frame
     void Update()
     {
