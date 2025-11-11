@@ -7,7 +7,7 @@ public class Timer : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] GameObject GOPanel;
-    float timeLeft = 5f;
+    float timeLeft = 121f;
 
     // Update is called once per frame
     void Update()

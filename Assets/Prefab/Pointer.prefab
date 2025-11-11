@@ -101,6 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4062462280145057461}
   - component: {fileID: 4322135990312473383}
+  - component: {fileID: 9148644414911438625}
   m_Layer: 5
   m_Name: Pointer
   m_TagString: Untagged
@@ -245,3 +246,15 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 6240969308177333660, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+--- !u!114 &9148644414911438625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8086564987170518943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a1e4920a8cf7d74ca42cc826fee6da6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VirtualMouseController
