@@ -59,6 +59,8 @@ public class TestMouvement : MonoBehaviour
 
     public Vector3 originalScale;
 
+    [SerializeField] PauseMenu pause;
+
     private void Start()
     {
         layers = LayerMask.GetMask("Wall");
@@ -76,32 +78,36 @@ public class TestMouvement : MonoBehaviour
 
     void Update()
     {
-        if (inAir) inAirTime += Time.deltaTime;
-        else inAirTime = 0;
-        isSprinting = sprintAction.IsPressed() && !isCrouched;
-        if (!inAir)
+        if (!pause.isPaused)
         {
-            currentSpeed = isSprinting ? speedModifier * sprintFactor : isCrouched ? speedModifier * crouchFactor : speedModifier;
-            currentSpeed = isSlowed ? currentSpeed / slowModifier : currentSpeed;
-            currentSpeed = isBoosted ? boostModifier * currentSpeed : currentSpeed;
+            if (inAir) inAirTime += Time.deltaTime;
+            else inAirTime = 0;
+            isSprinting = sprintAction.IsPressed() && !isCrouched;
+            if (!inAir)
+            {
+                currentSpeed = isSprinting ? speedModifier * sprintFactor : isCrouched ? speedModifier * crouchFactor : speedModifier;
+                currentSpeed = isSlowed ? currentSpeed / slowModifier : currentSpeed;
+                currentSpeed = isBoosted ? boostModifier * currentSpeed : currentSpeed;
+            }
+            Vector2 moveValue = moveAction.ReadValue<Vector2>();
+
+            if (moveValue.x < 0)
+            {
+                transform.rotation = Quaternion.Euler(0, 180f, 0);
+            }
+            else if (moveValue.x > 0) transform.rotation = Quaternion.Euler(0, 0, 0);
+
+            ProcessCrouch();
+
+            totalSpeed = currentSpeed * moveValue.x;
+
+            rb.linearVelocityX = totalSpeed;
+
+
+            ProcessJump();
+            ProcessBufferQueue();
+
         }
-        Vector2 moveValue = moveAction.ReadValue<Vector2>();
-
-        if (moveValue.x < 0)
-        {
-            transform.rotation = Quaternion.Euler(0, 180f, 0);
-        }
-        else if (moveValue.x > 0) transform.rotation = Quaternion.Euler(0, 0, 0);
-
-        ProcessCrouch();
-
-        totalSpeed = currentSpeed * moveValue.x;
-
-        rb.linearVelocityX = totalSpeed;
-
-
-        ProcessJump();
-        ProcessBufferQueue();
 
     }
 

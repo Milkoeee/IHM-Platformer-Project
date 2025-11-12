@@ -4,10 +4,19 @@ using UnityEngine.SceneManagement;
 public class EndOfLevel : MonoBehaviour
 {
 
+    bool finished = false;
     private AudioSource finishSound;
-        void Start()
+    void Start()
     {
         finishSound = GetComponent<AudioSource>();
+    }
+    
+    void Update()
+    {
+        if (finished && !finishSound.isPlaying)
+        {
+            SceneManager.LoadScene("Scenes/Main Menu", LoadSceneMode.Single);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -16,7 +25,7 @@ public class EndOfLevel : MonoBehaviour
         {
             UnlockNextLevel();
             finishSound.Play();
-            //SceneManager.LoadScene("Scenes/Main Menu", LoadSceneMode.Single);
+            finished = true;
         } 
     }
 

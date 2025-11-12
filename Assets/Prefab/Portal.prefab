@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2146605369360748665}
   - component: {fileID: 6852720886675192949}
   - component: {fileID: 3605179045082674920}
-  - component: {fileID: 9210609868729508463}
+  - component: {fileID: 8981451861832847627}
   m_Layer: 0
   m_Name: Portal
   m_TagString: Untagged
@@ -30,8 +30,8 @@ Transform:
   m_GameObject: {fileID: 2131717401831834553}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.37, y: -3.29, z: 0}
-  m_LocalScale: {x: 6, y: 9, z: 1}
+  m_LocalPosition: {x: 0.01, y: 0, z: 0}
+  m_LocalScale: {x: 6, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -128,17 +128,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.046126217, y: -0.020910531}
+  m_Offset: {x: -0.010912865, y: -0.009035751}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.64, y: 0.64}
+    oldSize: {x: 0.26, y: 0.48}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.27490407, y: 0.45817894}
+  m_Size: {x: 0.24590486, y: 0.4468576}
   m_EdgeRadius: 0
 --- !u!114 &6852720886675192949
 MonoBehaviour:
@@ -250,7 +250,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!95 &9210609868729508463
+--- !u!95 &8981451861832847627
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -260,7 +260,7 @@ Animator:
   m_GameObject: {fileID: 2131717401831834553}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e6291f352ffa71947bbb860f88676ddb, type: 2}
+  m_Controller: {fileID: 9100000, guid: 41e3f3f8e3181644a8d2e381e72b407d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -8,7 +8,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject cursor;
     [SerializeField] private InputActionAsset actions;
 
-    private bool isPaused = false;
+    public bool isPaused = false;
 
     private InputActionMap playerMap;
     private InputActionMap uiMap;
