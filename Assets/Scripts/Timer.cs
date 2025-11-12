@@ -21,6 +21,11 @@ public class Timer : MonoBehaviour
             timeLeft = 0;
             GameOver();
         }
+
+        if(timeLeft <= 30)
+        {
+            timerText.color = Color.red;
+        }
         int minutes = Mathf.FloorToInt(timeLeft / 60);
         int sec = Mathf.FloorToInt(timeLeft%60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, sec);
