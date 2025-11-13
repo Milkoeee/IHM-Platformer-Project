@@ -2868,7 +2868,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993151fb7a2279047b86ebdaf0149ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VolumeController
-  audioMixer: {fileID: 0}
+  audioMixer: {fileID: 24100000, guid: a3d1b1d14ee50534099dc554e77dfd56, type: 2}
   sfxSlider: {fileID: 322757928}
   musicSlider: {fileID: 1902081238}
 --- !u!1 &1139245767
