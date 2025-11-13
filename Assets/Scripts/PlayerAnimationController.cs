@@ -1,4 +1,3 @@
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -15,11 +14,11 @@ public class PlayerAnimationController : MonoBehaviour
     };
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    public AnimatorController jumpAnim;
-    public AnimatorController fallAnim;
-    public AnimatorController idleAnim;
-    public AnimatorController walkAnim;
-    public AnimatorController runAnim;
+    public RuntimeAnimatorController jumpAnim;
+    public RuntimeAnimatorController fallAnim;
+    public RuntimeAnimatorController idleAnim;
+    public RuntimeAnimatorController walkAnim;
+    public RuntimeAnimatorController runAnim;
 
     Animator source;
 
