@@ -15,12 +15,15 @@ public class PlayerAudioController : MonoBehaviour
     public AudioClip jumpSound;
     public AudioClip boostSound;
     public AudioClip slowSound;
+    public AudioClip bgMusic;
 
-    public AudioSource source;
+    [SerializeField] public AudioSource sourceMusic;
+    [SerializeField] public AudioSource sourceSFX;
 
     void Start()
     {
-        source = GetComponent<AudioSource>();
+        sourceMusic.clip = bgMusic;
+        sourceMusic.Play();
     }
 
     public void PlaySound(soundID id)
@@ -28,18 +31,18 @@ public class PlayerAudioController : MonoBehaviour
         switch (id)
         {
             case soundID.JUMP:
-                source.clip = jumpSound;
+                sourceSFX.clip = jumpSound;
                 break;
             case soundID.BOOST:
-                source.clip = boostSound;
+                sourceSFX.clip = boostSound;
                 break;
             case soundID.SLOW:
-                source.clip = slowSound;
+                sourceSFX.clip = slowSound;
                 break;
             default:
                 return;
         }
 
-        source.Play();
+        sourceSFX.Play();
     }
 }

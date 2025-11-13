@@ -1859,6 +1859,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6650189344966374972, guid: c7f81eaae01127b4886564868af08b9e, type: 3}
+      propertyPath: maxTime
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6650189344966374972, guid: c7f81eaae01127b4886564868af08b9e, type: 3}
       propertyPath: timeLeft
       value: 600
       objectReference: {fileID: 0}
