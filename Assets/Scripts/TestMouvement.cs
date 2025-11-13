@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using System;
 
 
 
@@ -13,6 +14,7 @@ public class TestMouvement : MonoBehaviour
     InputAction crouchAction;
 
     public PlayerAudioController audioController;
+    public PlayerAnimationController animationController;
 
     public Rigidbody2D rb;
     public float jumpSpeed = 20;
@@ -83,13 +85,17 @@ public class TestMouvement : MonoBehaviour
             if (inAir) inAirTime += Time.deltaTime;
             else inAirTime = 0;
             isSprinting = sprintAction.IsPressed() && !isCrouched;
+            Vector2 moveValue = moveAction.ReadValue<Vector2>();
             if (!inAir)
             {
                 currentSpeed = isSprinting ? speedModifier * sprintFactor : isCrouched ? speedModifier * crouchFactor : speedModifier;
                 currentSpeed = isSlowed ? currentSpeed / slowModifier : currentSpeed;
                 currentSpeed = isBoosted ? boostModifier * currentSpeed : currentSpeed;
+                if (Math.Abs(moveValue.x) < 1e-6) animationController.PlayAnimation(PlayerAnimationController.animID.IDLE);
+                else animationController.PlayAnimation(PlayerAnimationController.animID.RUN);
             }
-            Vector2 moveValue = moveAction.ReadValue<Vector2>();
+            if (Math.Abs(moveValue.x) < 1e-6) animationController.PlayAnimation(PlayerAnimationController.animID.IDLE);
+            else animationController.PlayAnimation(PlayerAnimationController.animID.RUN);
 
             if (moveValue.x < 0)
             {
@@ -136,6 +142,7 @@ public class TestMouvement : MonoBehaviour
 
     void JumpInit()
     {
+        animationController.PlayAnimation(PlayerAnimationController.animID.JUMP);
         audioController.PlaySound(PlayerAudioController.soundID.JUMP);
         isJumping = true;
         canBeBuffered = false;
@@ -176,6 +183,11 @@ public class TestMouvement : MonoBehaviour
             Jump();
         }
 
+        if (maxJump)
+        {
+            animationController.PlayAnimation(PlayerAnimationController.animID.FALL);
+
+        }
 
         if (!inAir && !isJumping)
         {
@@ -186,6 +198,7 @@ public class TestMouvement : MonoBehaviour
 
         if (jumpButton.WasReleasedThisFrame())
         {
+            animationController.PlayAnimation(PlayerAnimationController.animID.FALL);
             isJumping = false;
             canBeBuffered = true;
             pressing = false;
