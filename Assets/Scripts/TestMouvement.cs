@@ -47,7 +47,7 @@ public class TestMouvement : MonoBehaviour
 
     public int floorsCounter = 0;
 
-    [SerializeField] bool inAir = false;
+    [SerializeField] public bool inAir = false;
     [SerializeField] bool isSlowed = false;
     public float slowModifier = 2;
 
