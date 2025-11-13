@@ -1011,17 +1011,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4591567341444969205, guid: 17deb85f0647aa9b196fffdc5e053d26, type: 3}
   m_PrefabInstance: {fileID: 624366728}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &632403905 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3619656491422411949, guid: c7f81eaae01127b4886564868af08b9e, type: 3}
-  m_PrefabInstance: {fileID: 1465663018}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42f47935729e2b5479cef18aedc7ef56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
 --- !u!1001 &653574202
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1179,7 +1168,7 @@ PrefabInstance:
     - target: {fileID: 2426952391170828686, guid: 710a1cd486656b777bd1a7274cc46800, type: 3}
       propertyPath: pause
       value: 
-      objectReference: {fileID: 632403905}
+      objectReference: {fileID: 0}
     - target: {fileID: 2426952391170828686, guid: 710a1cd486656b777bd1a7274cc46800, type: 3}
       propertyPath: isCrouched
       value: 0
@@ -2075,6 +2064,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3619656491422411949, guid: c7f81eaae01127b4886564868af08b9e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6650189344966374972, guid: c7f81eaae01127b4886564868af08b9e, type: 3}
+      propertyPath: cursor
+      value: 
+      objectReference: {fileID: 1842517291}
+    - target: {fileID: 6650189344966374972, guid: c7f81eaae01127b4886564868af08b9e, type: 3}
+      propertyPath: actions
+      value: 
+      objectReference: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 6650189344966374972, guid: c7f81eaae01127b4886564868af08b9e, type: 3}
+      propertyPath: maxTime
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6650189344966374972, guid: c7f81eaae01127b4886564868af08b9e, type: 3}
       propertyPath: timeLeft
       value: 600
@@ -2449,6 +2454,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3b5487e05bcdad5fba71bd697973e3c, type: 3}
+--- !u!1 &1842517291 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3392050719310047062, guid: c7f81eaae01127b4886564868af08b9e, type: 3}
+  m_PrefabInstance: {fileID: 1465663018}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1851980053 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6852720886675192949, guid: e3b5487e05bcdad5fba71bd697973e3c, type: 3}

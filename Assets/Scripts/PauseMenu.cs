@@ -10,62 +10,56 @@ public class PauseMenu : MonoBehaviour
 
     public bool isPaused = false;
 
-    private InputActionMap playerMap;
-    private InputActionMap uiMap;
+    private InputAction pauseAction;
 
     private void Awake()
     {
-        playerMap = actions.FindActionMap("Player", true);
-        uiMap = actions.FindActionMap("UI", true);
+        pauseAction = InputSystem.actions.FindAction("Pause");
+
+        if (pauseAction != null) pauseAction.performed += GamepadPause;
+
     }
 
-    public void OnPause(InputAction.CallbackContext context)
+    private void OnDestroy()
     {
-        if (context.performed)
-        {
-            if(!isPaused) Pause();
-        }
+        if (pauseAction != null) pauseAction.performed -= GamepadPause;
+    }
+
+    private void GamepadPause(InputAction.CallbackContext context)
+    {
+        if (!isPaused) Pause();
     }
 
     public void Pause()
     {
         pauseMenu.SetActive(true);
         cursor.SetActive(true);
-        playerMap.Disable();
-        uiMap.Enable();
 
         isPaused = true;
-        Time.timeScale = 0.0f;
-
-    }
-
-    public void Home()
-    {
-        playerMap.Enable();
-        isPaused = false;
-        Time.timeScale = 1.0f;
-        SceneManager.LoadSceneAsync(0);
+        Time.timeScale = 0f;
     }
 
     public void Resume()
     {
         cursor.SetActive(false);
-        playerMap.Enable();
-        uiMap.Disable();
-        
+
         isPaused = false;
-        Time.timeScale = 1.0f;
+        Time.timeScale = 1f;
         pauseMenu.SetActive(false);
+    }
+
+    public void Home()
+    {
+        SceneManager.LoadSceneAsync(0);
+        isPaused = false;
+        Time.timeScale = 1f;
     }
 
     public void Restart()
     {
-        cursor.SetActive(false);
-        playerMap.Enable();
-        uiMap.Disable();
-
-        isPaused = false;
-        Time.timeScale = 1.0f;
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        isPaused = false;
+        Time.timeScale = 1f;
     }
 }
+

@@ -1,22 +1,28 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI timerText;
-    [SerializeField] GameObject GOPanel;
-    [SerializeField] float timeLeft = 5f;
-    [SerializeField] float maxTime = 300;
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private GameObject GOPanel;
+    [SerializeField] private GameObject cursor;
+    [SerializeField] private InputActionAsset actions;
+
+    [SerializeField] private float maxTime = 300f;
+    private float timeLeft;
+    private bool isGameOver = false;
 
     void Start()
     {
         timeLeft = maxTime;
     }
-    // Update is called once per frame
+
     void Update()
     {
+        if (isGameOver) return;
+
         if (timeLeft > 0)
         {
             timeLeft -= Time.deltaTime;
@@ -27,29 +33,33 @@ public class Timer : MonoBehaviour
             GameOver();
         }
 
-        if(timeLeft <= 30)
-        {
+        if (timeLeft <= 30)
             timerText.color = Color.red;
-        }
+
         int minutes = Mathf.FloorToInt(timeLeft / 60);
-        int sec = Mathf.FloorToInt(timeLeft%60);
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, sec);
+        int seconds = Mathf.FloorToInt(timeLeft % 60);
+        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     void GameOver()
     {
-        Time.timeScale = 0.0f;
+        if (isGameOver) return;
+
+        isGameOver = true;
+        Time.timeScale = 0f;
         GOPanel.SetActive(true);
+        cursor.SetActive(true);
     }
+
     public void Home()
     {
-        Time.timeScale = 1.0f;
         SceneManager.LoadSceneAsync(0);
-        
+        Time.timeScale = 1f;
     }
+
     public void Restart()
     {
-        Time.timeScale = 1.0f;
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);        
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1f;
     }
 }
