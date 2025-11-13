@@ -152,8 +152,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollowPlayer
   player: {fileID: 0}
   offset: {x: 6, y: 2}
-  lookDownValue: -5
-  lookUpValue: 5
-  holdTime: 0.7
+  lookDownValue: -4.5
+  lookUpValue: 4.5
+  holdTime: 0.3
   cameraSpeed: {x: 0, y: 0}
-  smoothDuration: 0.2
+  smoothDuration: 0.5
