@@ -8,7 +8,6 @@ public class Timer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private GameObject GOPanel;
     [SerializeField] private GameObject cursor;
-    [SerializeField] private InputActionAsset actions;
 
     [SerializeField] private float maxTime = 300f;
     private float timeLeft;
