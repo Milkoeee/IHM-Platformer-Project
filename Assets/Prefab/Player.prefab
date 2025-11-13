@@ -5287,6 +5287,7 @@ MonoBehaviour:
   jumpSound: {fileID: 8300000, guid: f1e408e66409bec4086e45ec3885c6f8, type: 3}
   boostSound: {fileID: 8300000, guid: ff8c592d9680d5a42991b2665010b7c7, type: 3}
   slowSound: {fileID: 8300000, guid: 3cf9064b5b101d4468fefc996280de63, type: 3}
+  gameOverSound: {fileID: 8300000, guid: f77c6299c5a65684696676a4fa37bfba, type: 3}
   bgMusic: {fileID: 8300000, guid: 1bafd7408dbecf54d8ab0d43d39209a3, type: 3}
   sourceMusic: {fileID: 7483082016446774517}
   sourceSFX: {fileID: 9064247998102070959}

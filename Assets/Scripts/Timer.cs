@@ -9,6 +9,8 @@ public class Timer : MonoBehaviour
     [SerializeField] private GameObject GOPanel;
     [SerializeField] private GameObject cursor;
 
+    public PlayerAudioController audioController;
+
     [SerializeField] private float maxTime = 300f;
     private float timeLeft;
     private bool isGameOver = false;
@@ -48,7 +50,9 @@ public class Timer : MonoBehaviour
         Time.timeScale = 0f;
         GOPanel.SetActive(true);
         cursor.SetActive(true);
-    }
+
+        audioController.PlaySound(PlayerAudioController.soundID.GO);
+}
 
     public void Home()
     {

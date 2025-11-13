@@ -8,13 +8,15 @@ public class PlayerAudioController : MonoBehaviour
     {
         JUMP,
         BOOST,
-        SLOW
+        SLOW,
+        GO
     };
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     public AudioClip jumpSound;
     public AudioClip boostSound;
     public AudioClip slowSound;
+    public AudioClip gameOverSound;
     public AudioClip bgMusic;
 
     [SerializeField] public AudioSource sourceMusic;
@@ -38,6 +40,9 @@ public class PlayerAudioController : MonoBehaviour
                 break;
             case soundID.SLOW:
                 sourceSFX.clip = slowSound;
+                break;
+            case soundID.GO:
+                sourceSFX.clip = gameOverSound;
                 break;
             default:
                 return;
