@@ -3544,7 +3544,6 @@ MonoBehaviour:
   buttons:
   - {fileID: 9181725}
   - {fileID: 760718594}
-  - {fileID: 0}
 --- !u!114 &1714786500
 MonoBehaviour:
   m_ObjectHideFlags: 0

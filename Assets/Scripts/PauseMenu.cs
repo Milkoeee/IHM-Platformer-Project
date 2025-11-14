@@ -15,6 +15,7 @@ public class PauseMenu : MonoBehaviour
     private void Awake()
     {
         pauseAction = InputSystem.actions.FindAction("Pause");
+        Time.timeScale = 1.0f;
 
         if (pauseAction != null) pauseAction.performed += GamepadPause;
 

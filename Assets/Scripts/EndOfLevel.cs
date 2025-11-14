@@ -15,13 +15,14 @@ public class EndOfLevel : MonoBehaviour
     {
         if (finished && !finishSound.isPlaying)
         {
+            Time.timeScale = 0.0f;
             SceneManager.LoadScene("Scenes/Main Menu", LoadSceneMode.Single);
         }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name.Equals("Player"))
+        if (collision.gameObject.name.Equals("Player") && !finished)
         {
             UnlockNextLevel();
             finishSound.Play();
